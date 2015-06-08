@@ -50,6 +50,45 @@ class ImageManager {
                 . \Form::hidden($field_name, $default, ['class' => 'inputFile'])
                 . '</div>';
     }
+
+
+    public static function getFieldForMultiple($params)
+    {
+        $text = ($params['text']) ? $params['text'] : 'Select File';
+        $class = ($params['class']) ? $params['class'] : 'btn btn-default';
+
+        $field_name = (isset($params['field_name'])) ? $params['field_name'] : 'images[]';
+        $default = (isset($params['default'])) ? $params['default'] : \Input::old($params['field_name']);;
+        $image  = '';
+        if(!empty($default))
+        {
+
+            foreach($default as $photo)
+            {
+                $image .=
+                  '<div class="col-lg-2">
+                    <img src="' . route( 'showthumb', $photo ) . '" class="imageManagerImage" />'
+                    . \Form::hidden( $field_name, $photo, [ 'class' => 'inputFile' ] ).
+                  '</div>';
+            }
+
+        }
+        else
+        {
+            $image = '<img src="" style="display:none" class="imageManagerImage" />';
+        }
+        return '<div class="form-group ImageManager">'
+                . '<label class="col-lg-2 control-label">Images</label>'
+                . '<div class="col-lg-10">'
+                .  '<button class="fileManager pull-right ' . $class . '" type="Button" data-url="' . route( 'ImageManager' ) . '">' . $text . '</button>'
+                . '</div>'
+                . '<div class="col-lg-10 col-lg-offset-2 images">'
+                . $image
+
+                . '</div>'
+
+                . '</div>';
+    }
     
     
 

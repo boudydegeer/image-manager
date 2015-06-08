@@ -3,7 +3,7 @@
     window.ImageManager = {
         uploader: null,
         caller: null,
-        SelectedFile: null,
+        SelectedFiles: [],
         colorbox: null,
         init: function() {
             $(document).on('click', '.fileManager', function() {
@@ -98,11 +98,22 @@
         afterSelect: function() {
             var $caller = window.ImageManagerCaller;
             window.ImageManagerCaller = null;
-            $input = $caller.parents('.ImageManager').find('.inputFile');
-            $preview = $caller.parents('.ImageManager').find('.imageManagerImage');
-            $input.val(window.ImageManager.SelectedFile.id);
-            $preview.attr('src', window.ImageManager.SelectedFile.url).show();
-            window.ImageManager.SelectedFile = null;
+            console.log(window.ImageManager.SelectedFiles);
+            console.log($caller);
+            $input = $caller.parents('.ImageManager').find('.images');
+            $.each(window.ImageManager.SelectedFiles, function(i, val){
+                $container = $('<div />').addClass('col-lg-2');
+                $img = $('<img />').attr('src', val.url);
+                $hidden = $('<input type="hidden" />').val(val.id);
+                console.log($hidden);
+                $container.append($img);
+                $container.append($hidden);
+                $input.append($container);
+            });
+            //$preview = $caller.parents('.ImageManager').find('.imageManagerImage');
+            //$input.val(window.ImageManager.SelectedFile.id);
+            //$preview.attr('src', window.ImageManager.SelectedFile.url).show();
+            window.ImageManager.SelectedFiles = [];
         }
     };
 
@@ -112,9 +123,20 @@
         }
     });
 
-    $(document).on('click', '[data-action="selected-file"]', function() {
+    $(document).on('click', '[data-action="use-file"]', function() {
         var $this = $(this);
-        window.ImageManager.SelectedFile = {id: $this.data('file-id'), url: $this.data('preview-url')};
+        window.ImageManager.SelectedFiles.push({id: $this.data('file-id'), url: $this.data('preview-url')});
+        $.colorbox.close();
+        window.ImageManager.afterSelect();
+    });
+
+    $(document).on('click', '[data-action="select-file"]', function() {
+        var $this = $(this);
+        window.ImageManager.SelectedFiles.push({
+            id: $this.data('file-id'),
+            url: $this.data('preview-url')
+        });
+
         $.colorbox.close();
         window.ImageManager.afterSelect();
     });
