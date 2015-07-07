@@ -57,8 +57,8 @@ class ImageManager {
         $text = ($params['text']) ? $params['text'] : 'Select File';
         $class = ($params['class']) ? $params['class'] : 'btn btn-default';
 
-        $field_name = (isset($params['field_name'])) ? $params['field_name'] : 'images[]';
-        $default = (isset($params['default'])) ? $params['default'] : \Input::old($params['field_name']);;
+        $field_name = (isset($params['field_name'])) ? $params['field_name'] : 'images';
+        $default = (isset($params['default'])) ? $params['default'] : \Input::old( $field_name );;
         $image  = '';
         if(!empty($default))
         {
@@ -66,10 +66,13 @@ class ImageManager {
             foreach($default as $photo)
             {
                 $image .=
-                  '<div class="col-lg-2">
+                  '<li class="ui-state-default">
+                    <div class="image-wrapper">
+                    <i class="fa fa-times"></i>
                     <img src="' . route( 'showthumb', $photo ) . '" class="imageManagerImage" />'
-                    . \Form::hidden( $field_name, $photo, [ 'class' => 'inputFile' ] ).
-                  '</div>';
+                    . \Form::hidden( $field_name."[]", $photo, [ 'class' => 'inputFile' ] ).
+                  '</div>
+                  </li>';
             }
 
         }
@@ -80,13 +83,13 @@ class ImageManager {
         return '<div class="form-group ImageManager">'
                 . '<label class="col-lg-2 control-label">Images</label>'
                 . '<div class="col-lg-10">'
-                .  '<button class="fileManager pull-right ' . $class . '" type="Button" data-url="' . route( 'ImageManager' ) . '">' . $text . '</button>'
+                .  '<button class="fileManager pull-right ' . $class . '" type="Button" data-url="' . route( 'ImageManager' ) . '" data-field-name="'.$field_name.'[]">' . $text . '</button>'
                 . '</div>'
                 . '<div class="col-lg-10 col-lg-offset-2 images">'
-                . $image
-
+                  . '<ul class=" sortable">'
+                    . $image
+                  . '</ul>'
                 . '</div>'
-
                 . '</div>';
     }
     

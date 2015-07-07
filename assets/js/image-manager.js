@@ -1,14 +1,19 @@
 (function($, window) {
 
     window.ImageManager = {
+        fieldName: 'images[]',
         uploader: null,
         caller: null,
         SelectedFiles: [],
         colorbox: null,
         init: function() {
+            $('.image-wrapper i').on('click', function (e) {
+                $(this).parent().parent().remove()
+            });
             $(document).on('click', '.fileManager', function() {
                 var $this = $(this);
                 window.ImageManagerCaller = $this;
+                window.ImageManager.fieldName = $this.data('field-name');
                 $.colorbox({
                     href: $this.data('url'),
                     open: true,
@@ -98,17 +103,25 @@
         afterSelect: function() {
             var $caller = window.ImageManagerCaller;
             window.ImageManagerCaller = null;
-            console.log(window.ImageManager.SelectedFiles);
-            console.log($caller);
+
             $input = $caller.parents('.ImageManager').find('.images');
             $.each(window.ImageManager.SelectedFiles, function(i, val){
-                $container = $('<div />').addClass('col-lg-2');
+                $outcontainer = $('<div />').addClass('col-lg-2');
+                $container = $('<div />').addClass('image-wrapper');
                 $img = $('<img />').attr('src', val.url);
-                $hidden = $('<input type="hidden" />').val(val.id);
-                console.log($hidden);
+                $hidden = $('<input type="hidden" />').val(val.id).attr('name', window.ImageManager.fieldName);
+                $icon = $('<i />').addClass("fa fa-times");
+
+                $($icon).on('click', function (e) {
+                    $(this).parent().parent().remove()
+                });
+
+
                 $container.append($img);
                 $container.append($hidden);
-                $input.append($container);
+                $container.append($icon);
+                $outcontainer.append($container);
+                $input.append($outcontainer);
             });
             //$preview = $caller.parents('.ImageManager').find('.imageManagerImage');
             //$input.val(window.ImageManager.SelectedFile.id);

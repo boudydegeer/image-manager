@@ -6,3 +6,54 @@
 {
     max-width: 100%;
 }
+
+.image-wrapper{
+    display: inline-block;
+    position: relative;
+
+    i{
+        display: none;
+    }
+    &:hover
+    {
+
+        border: 1px solid #ccc;
+        border-radius: 4px;
+
+        i
+        {
+            cursor: pointer;
+            border: 1px solid  #ccc;
+            border-radius: 18px;
+            display: block;
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 18px;
+            height: 18px;
+            text-align: center;
+            background-color: #c9302c;
+            color: white;
+            font-size: 12px;
+        }
+    }
+}
+
+.sortable {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 450px;
+}
+
+.sortable li {
+    margin: 3px 3px 3px 0;
+    padding: 1px;
+    float: left;
+    width: 100px;
+    height: 90px;
+    text-align: center;
+}
+
+
+
