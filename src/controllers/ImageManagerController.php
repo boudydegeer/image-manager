@@ -32,10 +32,18 @@ class ImageManagerController extends Controller {
     public function index() {
         return \View::make('image-manager::image_manager');
     }
+    public function indexMultiple() {
+        return \View::make('image-manager::image_manager', ['multiple' => true]);
+    }
     
     public function getImages(){
         $files = $this->ImageRepository->getFiles();
         return \View::make('image-manager::images_collection')->with('files', $files);
+    }
+
+    public function getImagesMultiple(){
+        $files = $this->ImageRepository->getFiles();
+        return \View::make('image-manager::images_collection', ['multiple' => true, 'files' => $files]);
     }
 
     public function thumb($id) {

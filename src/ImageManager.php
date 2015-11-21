@@ -56,6 +56,7 @@ class ImageManager {
     {
         $text = ($params['text']) ? $params['text'] : 'Select File';
         $class = ($params['class']) ? $params['class'] : 'btn btn-default';
+        $label = isset($params['label'])? $params['label'] : "Images";
 
         $field_name = (isset($params['field_name'])) ? $params['field_name'] : 'images';
         $default = (isset($params['default'])) ? $params['default'] : \Input::old( $field_name );;
@@ -80,10 +81,11 @@ class ImageManager {
         {
             $image = '<img src="" style="display:none" class="imageManagerImage" />';
         }
+
         return '<div class="form-group ImageManager">'
-                . '<label class="col-lg-2 control-label">Images</label>'
+                . '<label class="col-lg-2 control-label">'.$label.'</label>'
                 . '<div class="col-lg-10">'
-                .  '<button class="fileManager pull-right ' . $class . '" type="Button" data-url="' . route( 'ImageManager' ) . '" data-field-name="'.$field_name.'[]">' . $text . '</button>'
+                .  '<button class="fileManager pull-right ' . $class . '" type="Button" data-url="' . route( 'ImageManagerMultiple' ) . '" data-field-name="'.$field_name.'[]">' . $text . '</button>'
                 . '</div>'
                 . '<div class="col-lg-10 col-lg-offset-2 images">'
                   . '<ul class=" sortable">'

@@ -5,6 +5,7 @@
         uploader: null,
         caller: null,
         SelectedFiles: [],
+        SelectedFile: {},
         colorbox: null,
         init: function() {
             $('.image-wrapper i').on('click', function (e) {
@@ -102,31 +103,39 @@
         },
         afterSelect: function() {
             var $caller = window.ImageManagerCaller;
+
             window.ImageManagerCaller = null;
+            
+            $input = $caller.parents('.ImageManager').find('.images ul');
+            if(window.ImageManager.SelectedFiles.length > 0)
+            {
+                $.each(window.ImageManager.SelectedFiles, function(i, val){
+                    $outcontainer = $('<li />').addClass('ui-state-default ui-sortable-handle');
+                    $container = $('<div />').addClass('image-wrapper');
+                    $img = $('<img />').attr('src', val.url);
+                    $hidden = $('<input type="hidden" />').val(val.id).attr('name', window.ImageManager.fieldName);
+                    $icon = $('<i />').addClass("fa fa-times");
 
-            $input = $caller.parents('.ImageManager').find('.images');
-            $.each(window.ImageManager.SelectedFiles, function(i, val){
-                $outcontainer = $('<div />').addClass('col-lg-2');
-                $container = $('<div />').addClass('image-wrapper');
-                $img = $('<img />').attr('src', val.url);
-                $hidden = $('<input type="hidden" />').val(val.id).attr('name', window.ImageManager.fieldName);
-                $icon = $('<i />').addClass("fa fa-times");
+                    $($icon).on('click', function (e) {
+                        $(this).parent().parent().remove()
+                    });
 
-                $($icon).on('click', function (e) {
-                    $(this).parent().parent().remove()
+                    $container.append($img);
+                    $container.append($hidden);
+                    $container.append($icon);
+                    $outcontainer.append($container);
+                    $input.append($outcontainer);
                 });
-
-
-                $container.append($img);
-                $container.append($hidden);
-                $container.append($icon);
-                $outcontainer.append($container);
-                $input.append($outcontainer);
-            });
-            //$preview = $caller.parents('.ImageManager').find('.imageManagerImage');
-            //$input.val(window.ImageManager.SelectedFile.id);
-            //$preview.attr('src', window.ImageManager.SelectedFile.url).show();
-            window.ImageManager.SelectedFiles = [];
+                window.ImageManager.SelectedFiles = [];    
+            }
+            else if(window.ImageManager.SelectedFile)
+            {
+                $preview = $caller.parents('.ImageManager').find('.imageManagerImage');
+                $input = $caller.parents('.ImageManager').find('.inputFile');
+                $input.val(window.ImageManager.SelectedFile.id);
+                $preview.attr('src', window.ImageManager.SelectedFile.url).show();  
+                window.ImageManager.SelectedFile = {};
+            }
         }
     };
 
@@ -138,18 +147,48 @@
 
     $(document).on('click', '[data-action="use-file"]', function() {
         var $this = $(this);
-        window.ImageManager.SelectedFiles.push({id: $this.data('file-id'), url: $this.data('preview-url')});
+        window.ImageManager.SelectedFile = {id: $this.data('file-id'), url: $this.data('preview-url')};
         $.colorbox.close();
         window.ImageManager.afterSelect();
     });
 
     $(document).on('click', '[data-action="select-file"]', function() {
         var $this = $(this);
-        window.ImageManager.SelectedFiles.push({
-            id: $this.data('file-id'),
-            url: $this.data('preview-url')
-        });
+        $this.toggleClass('btn-info');
+       
+        if($this.hasClass("btn-info"))
+        {
+            $this.data("index", window.ImageManager.SelectedFiles.length);
+            window.ImageManager.SelectedFiles.push({
+                id: $this.data('file-id'),
+                url: $this.data('preview-url')
+            }); 
+            
+        }
+        else
+        {
+            index = $this.data("index");
+            if(index > -1)
+           {    
+                window.ImageManager.SelectedFiles.splice(index, 1);
+                $this.removeData("index")
+           }
+        }
 
+        
+        if( window.ImageManager.SelectedFiles.length > 0)
+        {
+
+            $("#addSelectedFiles").removeClass('hidden');
+        }
+        else
+        {
+            $("#addSelectedFiles").addClass('hidden');
+        }
+        
+    });
+
+     $(document).on('click', '[data-action="add-selected-files"]', function() {
         $.colorbox.close();
         window.ImageManager.afterSelect();
     });

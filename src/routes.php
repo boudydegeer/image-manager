@@ -33,6 +33,10 @@ Route::group(['middleware' => config('image-manager.middleware')], function() {
         'as' => 'ImageManager',
         'uses' => '\\Joselfonseca\\ImageManager\\Controllers\\ImageManagerController@index'
     ]);
+    Route::get('image-manager/multiple', [
+        'as' => 'ImageManagerMultiple',
+        'uses' => '\\Joselfonseca\\ImageManager\\Controllers\\ImageManagerController@indexMultiple'
+    ]);
     Route::post('upload-image', [
         'as' => 'ImageManagerUpload',
         'uses' => '\\Joselfonseca\\ImageManager\\Controllers\\ImageManagerController@store'
@@ -40,6 +44,10 @@ Route::group(['middleware' => config('image-manager.middleware')], function() {
     Route::get('image-manager-images', [
         'as' => 'ImageManagerImages',
         'uses' => '\\Joselfonseca\\ImageManager\\Controllers\\ImageManagerController@getImages'
+    ]);
+    Route::get('image-manager-multiple-images', [
+        'as' => 'ImageManagerImages',
+        'uses' => '\\Joselfonseca\\ImageManager\\Controllers\\ImageManagerController@getImagesMultiple'
     ]);
     Route::get('image-manager/delete/{id}', [
         'as' => 'ImageManagerDelete',

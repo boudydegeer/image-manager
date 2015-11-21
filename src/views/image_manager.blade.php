@@ -18,9 +18,12 @@
                     </div>
                 </div>
                 <div class='col-lg-9'>
-                    <h4>Select from library</h4>
-                    <div id="image-loader">
-
+                    <h4 class="pull-left">Select from library</h4>
+                    <div class="pull-right">
+                        <button id="addSelectedFiles" class="btn btn-primary btn-block hidden" data-action="add-selected-files">Add Selected Files</button>
+                    </div>
+                    <div class="row">
+                        <div id="image-loader" class="col-md-12"></div>
                     </div>
                 </div>
             </div>
@@ -31,7 +34,7 @@
                 flash: '{{asset("/vendor/image-manager/vendors/plupload/Moxie.swf")}}',
                 silverlight: '{{asset("/vendor/image-manager/vendors/plupload/Moxie.xap")}}',
                 maxFileSize: '{{config("image-manager.maxFileSize")}}',
-                imagesUrl: '{{url("image-manager-images")}}',
+                imagesUrl: '@if(isset($multiple)){{ url("image-manager-multiple-images") }} @else{{ url("image-manager-images") }}@endif',
                 csfr: '{{csrf_token()}}'
             };
         </script>

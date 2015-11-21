@@ -47,6 +47,11 @@ class ImageManagerFiles extends Model implements ImageDbStorageInterface {
         return $this->belongsToMany( 'Wandapanda\Store\Models\Product', 'product_image', 'image_manager_files', 'product' );
     }
 
+    public function pages()
+    {
+        return $this->belongsToMany( 'Wandapanda\Site\Models\Page', 'page_image', 'image_manager_files', 'page' );
+    }
+
     public function deleteFile() {
         return $this->delete();
     }
