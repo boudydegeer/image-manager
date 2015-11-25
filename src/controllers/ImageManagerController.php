@@ -2,17 +2,17 @@
 
 namespace Joselfonseca\ImageManager\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Joselfonseca\ImageManager\Commands\UploadFile\UploadFileCommand;
-use Joselfonseca\ImageManager\Commands\RenderFile\RenderFileCommand;
-use Joselfonseca\ImageManager\Commands\DeleteFile\DeleteFileCommand;
 use Laracasts\Commander\CommanderTrait;
-/** exceptions * */
 use Joselfonseca\ImageManager\Exceptions\ValidationExeption;
 use Joselfonseca\ImageManager\Exceptions\AlocateFileException;
-use Joselfonseca\ImageManager\Exceptions\ModelNotFoundException as JoseModelNotFoundException;
-
 use Joselfonseca\ImageManager\Interfaces\ImageRepositoryInterface;
+use Joselfonseca\ImageManager\Commands\DeleteFile\DeleteFileCommand;
+use Joselfonseca\ImageManager\Commands\RenderFile\RenderFileCommand;
+use Joselfonseca\ImageManager\Commands\UpdateFile\UpdateFileCommand;
+use Joselfonseca\ImageManager\Commands\UploadFile\UploadFileCommand;
+use Joselfonseca\ImageManager\Exceptions\ModelNotFoundException as JoseModelNotFoundException;
 
 /**
  * Description of ImageManagerController
@@ -74,6 +74,18 @@ class ImageManagerController extends Controller {
     public function delete($id){
         try{
             $this->execute(DeleteFileCommand::class, ['id' => $id]);
+        }catch(JoseModelNotFoundException $e){
+            $return = ['errorCode' => 'ModelNotFound', 'message' => 'The file does not exsist.'];
+            return response()->json($return, 404);
+        }
+        return response()->json(['status' => true]);
+    }
+
+    public function update($id, Request $request)
+    {
+
+        try{
+            $this->execute(UpdateFileCommand::class, ['id' => $id , 'alt' => $request->get('alt') ]);
         }catch(JoseModelNotFoundException $e){
             $return = ['errorCode' => 'ModelNotFound', 'message' => 'The file does not exsist.'];
             return response()->json($return, 404);

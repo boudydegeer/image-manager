@@ -13,6 +13,7 @@ class ImageManagerFilesTable extends Migration {
         Schema::create('image_manager_files', function($table) {
             $table->increments('id');
             $table->string('name');
+            $table->string('alt');
             $table->string('originalName');
             $table->string('type');
             $table->string('path');

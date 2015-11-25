@@ -53,4 +53,9 @@ Route::group(['middleware' => config('image-manager.middleware')], function() {
         'as' => 'ImageManagerDelete',
         'uses' => '\\Joselfonseca\\ImageManager\\Controllers\\ImageManagerController@delete'
     ]);
+
+    Route::post('image-manager/update/{id}', [
+        'as' => 'ImageManagerUpdate',
+        'uses' => '\\Joselfonseca\\ImageManager\\Controllers\\ImageManagerController@update'
+    ]);
 });

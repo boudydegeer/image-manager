@@ -4,6 +4,9 @@ namespace Joselfonseca\ImageManager;
 
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
+use Joselfonseca\ImageManager\Models\ImageManagerFiles;
+use Joselfonseca\ImageManager\Repositories\ImageRepository;
+use Joselfonseca\ImageManager\Interfaces\ImageRepositoryInterface;
 
 class ImageManagerServiceProvider extends ServiceProvider
 {
@@ -59,13 +62,21 @@ class ImageManagerServiceProvider extends ServiceProvider
         foreach ($this->providers as $provider) {
             $this->app->register($provider);
         }
+
+        $this->app->bindShared('ImageManager', function($app)
+        {
+            $repo = new ImageRepository(new ImageManagerFiles);
+            return new ImageManager($repo);
+        });
+
+
         return $this;
     }
 
     protected function registerAliases()
     {
         foreach ($this->aliases as $alias => $original) {
-            AliasLoader::getInstance()->alias($alias, $original);
+            $this->app->alias($alias, $original);
         }
         return $this;
     }

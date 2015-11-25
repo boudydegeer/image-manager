@@ -2,6 +2,8 @@
 
 namespace Joselfonseca\ImageManager;
 
+use Intervention\Image\Facades\Image;
+
 /**
  * Description of ImageRender
  *
@@ -29,7 +31,7 @@ class ImageRender {
     // This is Dirty, will come back to it later
     protected function resizeNormal() {
         if (empty($this->path)) {
-            $this->image = \Image::cache(function($image) {
+            $this->image = Image::cache(function($image) {
                         if (!empty($this->width) && empty($this->height)) {
                             return $image->canvas(800, 800, $this->bgcolor)->resize($this->width, null, function ($constraint) {
                                         $constraint->aspectRatio();
@@ -47,7 +49,7 @@ class ImageRender {
                         }
                     }, 10, true);
         } else {
-            $this->image = \Image::cache(function($image) {
+            $this->image = Image::cache(function($image) {
                         if (!empty($this->width) && empty($this->height)) {
                             return $image->make($this->destination . '/' . $this->path)->resize($this->width, null, function ($constraint) {
                                         $constraint->aspectRatio();
@@ -69,11 +71,11 @@ class ImageRender {
 
     protected function resizeCanvas() {
         if (empty($this->path)) {
-            $this->image = \Image::cache(function($image) {
+            $this->image = Image::cache(function($image) {
                         return $image->canvas(800, 800, $this->bgcolor)->resizeCanvas($this->width, $this->height, $this->position, false, $this->bgcolor);
                     }, 10, true);
         } else {
-            $this->image = \Image::cache(function($image) {
+            $this->image = Image::cache(function($image) {
                         return $image->make($this->destination . '/' . $this->path)->resizeCanvas($this->width, $this->height, $this->position, false, $this->bgcolor);
                     }, 10, true);
         }

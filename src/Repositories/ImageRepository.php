@@ -77,6 +77,19 @@ class ImageRepository implements ImageRepositoryInterface {
         $this->removeFileFromDb();
     }
 
+     public function updateFile($comand) {
+        try {
+            $this->file = $this->model->getFileById($comand->id);
+            $this->file->alt = $comand->alt;
+            $this->file->save();
+
+        } catch (ModelNotFoundException $e) {
+            throw new JoseModelNotFoundException;
+        }
+        
+        
+    }
+
     private function removeFileFromDisk() {
         $file = $this->destination . '/' . $this->file->path;
         unlink($file);

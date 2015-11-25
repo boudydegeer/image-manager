@@ -213,4 +213,23 @@
         }, 'json');
     });
 
+    $(document).on('click', '[data-action="update-file"]', function() {
+        var $this = $(this);
+        var altText = $("#alt-text-" +$(this).data("file-id")).val()
+        var token = $("#token").val()
+        console.log(token)
+        $.post($this.data('update-url'),{ 
+            "alt" : altText,
+            "_token" : token
+        }, function(json) 
+        {
+            if (json.status === true) {
+               
+            } else {
+                console.log(json.message);
+                
+            }
+        }, 'json');
+    });
+
 })($, window);
